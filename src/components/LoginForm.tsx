@@ -1,36 +1,26 @@
 import React, { FC, useState } from 'react';
 import { Button, Form, Input } from "antd";
 import { rules } from "../utils/rules";
-import { useDispatch } from "react-redux";
-import { AuthActionCreators } from "../store/reducers/auth/action-creators";
 import { useTypedSelector } from "../hooks/useTypedSelector";
+import { useActions } from "../hooks/useActions";
 
 const LoginForm: FC = (): JSX.Element => {
-    const dispatch = useDispatch();
+    const { login } = useActions();
     const { isLoading, isError } = useTypedSelector(state => state.auth);
-    console.log(isError);
-    console.log(isLoading)
 
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
-    const submit = (): void => {
-        dispatch(AuthActionCreators.login(username, password));
+    const onSubmit = (): void => {
+        login(username, password);
     }
-
-
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
-    }
-
 
     return (
         <Form
-            onFinish={submit}
-            onFinishFailed={onFinishFailed}
+            onFinish={onSubmit}
             initialValues={{ remember: true }}
         >
-            {isError && <div>{isError}</div>}
+            {isError && <div style={{color: 'red'}}>{isError}</div>}
             <Form.Item
                 label={"Username"}
                 name={"username"}

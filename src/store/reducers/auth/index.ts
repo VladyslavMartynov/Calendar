@@ -1,6 +1,5 @@
 import { AuthActionEnum, AuthActions, IAuthState } from "./types";
 
-
 const initialState: IAuthState = {
     isAuth: false,
     isLoading: false,
@@ -16,7 +15,7 @@ function authReducer(state = initialState, action: AuthActions): IAuthState {
         case AuthActionEnum.SET_AUTH:
             return {...state, isAuth: action.payload, isLoading: false}
         case AuthActionEnum.SET_IS_LOADING:
-            return {...state, isLoading: action.payload} as IAuthState
+            return {...state, isLoading: action.payload}
         case AuthActionEnum.SET_ERROR:
             return {...state, isError: action.payload, isLoading: false}
         case AuthActionEnum.SET_USER:

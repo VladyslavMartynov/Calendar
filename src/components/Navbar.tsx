@@ -1,16 +1,21 @@
 import React, { FC } from 'react';
+import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useNavigate } from 'react-router-dom';
 import { Layout, Menu, Row } from "antd";
 import { RouteNames } from "../router";
-import { useTypedSelector } from "../hooks/useTypedSelector";
+import { useActions } from "../hooks/useActions";
 
 const Navbar: FC = (): JSX.Element => {
-    const { isAuth } = useTypedSelector(({ auth: { isAuth }}) => ({ isAuth }));
-
+    const { logout } = useActions();
     const navigate = useNavigate();
+    const { isAuth, user } = useTypedSelector(({ auth: { isAuth, user }}) => ({ isAuth, user }));
 
     const onLoginNavigate = (): void => {
         navigate(`${RouteNames.LOGIN}`);
+    }
+
+    const onExitClick = (): void => {
+        logout();
     }
 
     return (
@@ -18,9 +23,9 @@ const Navbar: FC = (): JSX.Element => {
             <Row justify={"end"}>
                 {isAuth ?
                     <>
-                        <div style={{color: 'white'}}>Project</div>
+                        <div style={{color: 'white'}}>{user.username}</div>
                         <Menu mode={"horizontal"} theme={"dark"} selectable={false}>
-                            <Menu.Item key={1} onClick={() => console.log('Exit')}>Exit</Menu.Item>
+                            <Menu.Item key={1} onClick={onExitClick}>Exit</Menu.Item>
                         </Menu>
                     </>
                     :

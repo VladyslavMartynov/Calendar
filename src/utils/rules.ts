@@ -4,7 +4,7 @@ type RequiredType = {
 }
 
 export const rules = {
-    require: (message:string): RequiredType => ({
+    require: (message: string = "Required field"): RequiredType => ({
         required: true,
         message: message
     })

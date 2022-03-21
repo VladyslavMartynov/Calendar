@@ -2,6 +2,7 @@ import { AuthActionEnum, SetAuthAction, SetErrorAction, SetIsLoadingAction, SetU
 import { IUser } from "../../../models/IUser";
 import { AppDispatch } from "../../index";
 import axios from "axios";
+import UserService from "../../../api/UserService";
 
 export const AuthActionCreators = {
     setUser: (user:IUser): SetUserAction => ({
@@ -23,7 +24,7 @@ export const AuthActionCreators = {
     login: (username: string, password: string) => async (dispatch: AppDispatch): Promise<void> => {
         try {
             dispatch(AuthActionCreators.setIsLoading(true));
-                const response = await axios.get<IUser []>('./users.json');
+                const response = await UserService.getUsers();
                 const mockUser = response.data.find((user) => user.username === username && user.password === password);
                 console.log(mockUser)
                 if (!!mockUser) {
@@ -42,6 +43,13 @@ export const AuthActionCreators = {
         }
     },
     logout: () => async (dispatch: AppDispatch) => {
-
+        try {
+            localStorage.setItem('auth', 'false');
+            localStorage.removeItem('username');
+            dispatch(AuthActionCreators.setUser({} as IUser));
+            dispatch(AuthActionCreators.setAuth(false));
+        } catch (e) {
+            dispatch(AuthActionCreators.setError('Logout error'));
+        }
     }
 }
