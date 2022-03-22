@@ -13,7 +13,6 @@ interface EventFormProps {
 }
 
 const EventForm: FC<EventFormProps> = ({ guests, submit }): JSX.Element => {
-    console.log('render EventForm');
     const { user } = useTypedSelector(state => state.auth)
     const [event, setEvent] = useState<IEvent>({
         author: '',
@@ -60,7 +59,7 @@ const EventForm: FC<EventFormProps> = ({ guests, submit }): JSX.Element => {
             <Form.Item
                 label={"Choose Date"}
                 name={"date"}
-                rules={[rules.require()]}
+                rules={[rules.require(), rules.isDateAfter('You can not create event in the past!')]}
             >
                 <DatePicker onChange={(date) => selectDate(date)}/>
             </Form.Item>
